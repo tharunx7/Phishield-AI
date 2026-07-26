@@ -1,0 +1,15 @@
+<!-- This is a placeholder SVG icon. For production, convert to PNG using a tool like Sharp or Inkscape. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="24" fill="#0a0a1a"/>
+  <path d="M64 16L24 32v24c0 28 17 54 40 62 23-8 40-34 40-62V32L64 16z"
+        fill="url(#shieldGrad)" opacity="0.9"/>
+  <path d="M64 28L32 40v20c0 23 14 44 32 51 18-7 32-28 32-51V40L64 28z"
+        fill="#0a0a1a" opacity="0.6"/>
+  <path d="M56 68l-8-8 4-4 4 4 12-12 4 4-16 16z" fill="#00ffd5"/>
+</svg>

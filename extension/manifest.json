@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "PhishShield AI",
+  "version": "1.1.0",
+  "description": "AI-powered phishing detection system with real-time threat intelligence, protecting you from malicious websites, fake login pages, and scam links.",
+  "permissions": ["activeTab", "storage", "tabs", "alarms", "scripting"],
+  "host_permissions": [
+    "<all_urls>",
+    "https://safebrowsing.googleapis.com/*",
+    "http://localhost:3001/*",
+    "https://urlhaus-api.abuse.ch/*",
+    "https://openphish.com/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["dashboard_dist/*", "warning.html", "warning.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

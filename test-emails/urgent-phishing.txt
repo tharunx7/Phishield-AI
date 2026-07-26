@@ -1,0 +1,8 @@
+Dear customer, 
+
+Immediate action required! Your account has been suspended due to suspicious login attempts from Russia. Please verify your account immediately to avoid permanent deletion. 
+
+Click here to restore access: http://login.secure.paypal.update.com 
+
+Regards,
+Security Team

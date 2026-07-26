@@ -1,0 +1,19 @@
+From: "DocuSign Billing Service" <billing-dept@docusign-verification-portal.com>
+To: employee@company.com
+Subject: ACTION REQUIRED: Overdue Tax Invoice & Remittance Document #INV-928371
+
+DocuSign Security Notification
+----------------------------------------------------------------------
+Document Title: Overdue_Vendor_Invoice_INV-928371.pdf
+Sender: Accounting Department <remittance@docusign-verification-portal.com>
+Security Status: Encrypted (Requires Action)
+
+Please review and sign your vendor tax invoice below:
+http://docusign-verify-document-security.net/auth?token=928374981273
+
+⚠️ WARNING: This document contains VBA Macro Content. If prompted by your PDF/Word viewer, click "Enable Content" or "Enable Editing" to execute the decryption payload and verify payment details.
+
+Thank you,
+DocuSign Secure Document Cloud
+----------------------------------------------------------------------
+Attachment: INV-928371_Remittance_Payload.docm (VBA Macro Payload Detected)

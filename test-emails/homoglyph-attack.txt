@@ -1,0 +1,5 @@
+Dear user,
+
+We are updating our terms of service. Please log in to your pаypal account to review the new policies. 
+
+(Note for testing: the 'a' in pаypal above is actually a Cyrillic 'а', not a normal Latin 'a'. The AI will catch this as a Homoglyph attack!)

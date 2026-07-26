@@ -1,0 +1,270 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'Space Mono', 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* ============================================================
+   Theme Variables — Light Mode (default)
+   ============================================================ */
+:root {
+  --bg-root: #ffffff;
+  --bg-surface: #f0f4f8;
+  --bg-card: #ffffff;
+  --bg-dropdown-opaque: #ffffff;
+  --bg-input: #f0f4f8;
+  --bg-sidebar: rgba(255, 255, 255, 0.85);
+  --bg-header: rgba(255, 255, 255, 0.8);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --border-color-subtle: rgba(0, 0, 0, 0.05);
+  
+  --text-primary: #000000;
+  --text-secondary: #333333;
+  --text-muted: #666666;
+  --text-heading: #000000;
+  
+  /* Semantic Colors */
+  --text-accent: #0056b3;
+  --text-accent-purple: #6a1b9a;
+  --text-success: #15803d;
+  --text-danger: #b91c1c;
+  --text-warning: #b45309;
+  
+  --bg-accent-subtle: rgba(0, 86, 179, 0.1);
+  --bg-purple-subtle: rgba(106, 27, 154, 0.1);
+  --bg-success-subtle: rgba(21, 128, 61, 0.1);
+  --bg-danger-subtle: rgba(185, 28, 28, 0.1);
+  --bg-warning-subtle: rgba(180, 83, 9, 0.1);
+  
+  --border-accent-subtle: rgba(0, 86, 179, 0.2);
+  --border-purple-subtle: rgba(106, 27, 154, 0.2);
+  --border-success-subtle: rgba(21, 128, 61, 0.2);
+  --border-danger-subtle: rgba(185, 28, 28, 0.2);
+  --border-warning-subtle: rgba(180, 83, 9, 0.2);
+
+  --glow-cyan: rgba(0, 123, 255, 0.2);
+  --glow-purple: rgba(106, 27, 154, 0.2);
+  --glow-blue: rgba(0, 123, 255, 0.1);
+  
+  --glass-blur: blur(12px);
+  --scrollbar-thumb: rgba(0, 123, 255, 0.3);
+  --scrollbar-hover: rgba(0, 123, 255, 0.5);
+}
+
+/* ============================================================
+   Theme Variables — Dark Mode
+   ============================================================ */
+.dark {
+  --bg-root: #05050f;
+  --bg-surface: rgba(15, 23, 42, 0.4);
+  --bg-card: rgba(15, 23, 42, 0.5);
+  --bg-dropdown-opaque: #0b0f19;
+  --bg-input: rgba(15, 23, 42, 0.6);
+  --bg-sidebar: rgba(15, 23, 42, 0.5);
+  --bg-header: rgba(15, 23, 42, 0.5);
+  --border-color: rgba(51, 65, 85, 0.6);
+  --border-color-subtle: rgba(51, 65, 85, 0.3);
+  
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-heading: #ffffff;
+  
+  /* Semantic Colors */
+  --text-accent: #22d3ee;
+  --text-accent-purple: #c084fc;
+  --text-success: #4ade80;
+  --text-danger: #f87171;
+  --text-warning: #facc15;
+  
+  --bg-accent-subtle: rgba(34, 211, 238, 0.1);
+  --bg-purple-subtle: rgba(168, 85, 247, 0.1);
+  --bg-success-subtle: rgba(74, 222, 128, 0.1);
+  --bg-danger-subtle: rgba(248, 113, 113, 0.1);
+  --bg-warning-subtle: rgba(250, 204, 21, 0.1);
+  
+  --border-accent-subtle: rgba(34, 211, 238, 0.2);
+  --border-purple-subtle: rgba(168, 85, 247, 0.2);
+  --border-success-subtle: rgba(74, 222, 128, 0.2);
+  --border-danger-subtle: rgba(248, 113, 113, 0.2);
+  --border-warning-subtle: rgba(250, 204, 21, 0.2);
+
+  --glow-cyan: rgba(34, 211, 238, 0.2);
+  --glow-purple: rgba(168, 85, 247, 0.2);
+  --glow-blue: rgba(59, 130, 246, 0.1);
+  
+  --glass-blur: blur(12px);
+  --scrollbar-thumb: rgba(34, 211, 238, 0.2);
+  --scrollbar-hover: rgba(34, 211, 238, 0.4);
+}
+
+/* ============================================================
+   Global Styles & Animations
+   ============================================================ */
+body {
+  background-color: var(--bg-root);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-hover);
+}
+
+.recharts-tooltip-cursor {
+  fill: rgba(30, 41, 59, 0.4);
+}
+
+/* ============================================================
+   Premium Hover Effects & Animations (Judge Impressers)
+   ============================================================ */
+
+@keyframes shimmer {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 15px var(--glow-cyan); }
+  50% { box-shadow: 0 0 25px var(--glow-cyan), 0 0 10px var(--glow-purple); }
+}
+
+.glass-card, .hover-lift {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::after, .hover-lift::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.1), transparent);
+  transform: skewX(-20deg);
+  transition: all 0.7s ease;
+}
+
+.glass-card:hover::after, .hover-lift:hover::after {
+  left: 200%;
+}
+
+.glass-card:hover, .hover-lift:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3), 0 0 15px var(--glow-cyan);
+  border-color: var(--text-accent);
+}
+
+button {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease, filter 0.3s ease;
+}
+
+button:hover {
+  filter: brightness(1.1);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+.btn-pulse:hover {
+  animation: pulseGlow 2s infinite;
+}
+
+/* ============================================================
+   Dynamic Theme Overrides for Tailwind classes
+   These automatically map Tailwind colors to our CSS variables
+   ============================================================ */
+/* Text Colors */
+.text-white { color: var(--text-heading) !important; }
+.text-slate-200, .text-slate-100 { color: var(--text-primary) !important; }
+.text-slate-300 { color: var(--text-secondary) !important; }
+.text-slate-400, .text-slate-500 { color: var(--text-muted) !important; }
+.hover\:text-slate-300:hover { color: var(--text-secondary) !important; }
+.hover\:text-slate-200:hover { color: var(--text-primary) !important; }
+
+.text-cyan-400, .text-cyan-500, .text-blue-400, .text-blue-500 { color: var(--text-accent) !important; }
+.hover\:text-cyan-400:hover, .hover\:text-cyan-300:hover { color: var(--text-accent) !important; }
+.text-purple-400, .text-purple-500 { color: var(--text-accent-purple) !important; }
+.text-green-400, .text-green-500 { color: var(--text-success) !important; }
+.text-red-400, .text-red-500 { color: var(--text-danger) !important; }
+.text-yellow-400, .text-yellow-500, .text-amber-400, .text-amber-500 { color: var(--text-warning) !important; }
+
+/* Structural Backgrounds */
+[class*="bg-slate-900"], [class*="bg-slate-950"] { background-color: var(--bg-card) !important; }
+[class*="bg-slate-800"], [class*="bg-slate-700"] { background-color: var(--bg-surface) !important; }
+.hover\:bg-slate-800:hover, .hover\:bg-slate-800\/30:hover, .hover\:bg-slate-800\/50:hover { background-color: var(--bg-surface) !important; }
+
+/* Subtle Highlight Backgrounds */
+[class*="bg-cyan-500/"], [class*="bg-cyan-400/"] { background-color: var(--bg-accent-subtle) !important; }
+[class*="bg-purple-500/"], [class*="bg-purple-400/"] { background-color: var(--bg-purple-subtle) !important; }
+[class*="bg-green-500/"], [class*="bg-green-400/"] { background-color: var(--bg-success-subtle) !important; }
+[class*="bg-red-500/"], [class*="bg-red-400/"] { background-color: var(--bg-danger-subtle) !important; }
+[class*="bg-yellow-500/"], [class*="bg-yellow-400/"], [class*="bg-amber-500/"] { background-color: var(--bg-warning-subtle) !important; }
+
+/* Gradients Removed to allow Tailwind dark: variants to work properly */
+
+/* Borders & Dividers */
+[class*="border-slate-800"], [class*="border-slate-700"] { border-color: var(--border-color) !important; }
+[class*="divide-slate-800"] > :not([hidden]) ~ :not([hidden]) { border-color: var(--border-color) !important; }
+
+/* Subtle Borders */
+[class*="border-cyan-500/"], [class*="border-cyan-400"] { border-color: var(--border-accent-subtle) !important; }
+[class*="border-purple-500/"], [class*="border-purple-400"] { border-color: var(--border-purple-subtle) !important; }
+[class*="border-green-500/"], [class*="border-green-400"] { border-color: var(--border-success-subtle) !important; }
+[class*="border-red-500/"], [class*="border-red-400"] { border-color: var(--border-danger-subtle) !important; }
+[class*="border-yellow-500/"], [class*="border-yellow-400"], [class*="border-amber-500"] { border-color: var(--border-warning-subtle) !important; }
+
+/* Inputs and Selects */
+input[class*="bg-slate-900"], input[class*="bg-slate-800"] {
+  background-color: var(--bg-input) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+input::placeholder { color: var(--text-muted) !important; }
+
+/* Chrome Autofill overrides to preserve dark mode UI */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--bg-input) inset !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+select[class*="bg-slate-800"] {
+  background-color: var(--bg-input) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Toast/notification animation */
+@keyframes toastSlideIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toastSlideOut { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-10px); } }
+.toast-animate-in { animation: toastSlideIn 0.3s ease forwards; }
+.toast-animate-out { animation: toastSlideOut 0.3s ease forwards; }
+
+@keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+.animate-marquee { display: flex; width: max-content; animation: marquee 25s linear infinite; }
+.animate-marquee:hover { animation-play-state: paused; }

@@ -1,0 +1,15 @@
+{
+  "name": "phishshield-detector",
+  "version": "1.0.0",
+  "description": "Automated testing suite for PhishShield AI phishing detector",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "build:dashboard": "cd dashboard && npm run build",
+    "build:extension": "cd extension && npm run build",
+    "build": "npm run build:dashboard && npm run build:extension"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

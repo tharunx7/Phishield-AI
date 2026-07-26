@@ -1,0 +1,31 @@
+From: "PayPal Security Team" <security-alert@pаypal-support-update.tk>
+To: victim@company-corporate.example
+Subject: URGENT: Unauthorized Access Attempt Detected - Account Suspended #827391
+Date: Thu, 23 Jul 2026 14:10:00 +0530
+MIME-Version: 1.0
+Content-Type: text/html; charset="UTF-8"
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body { font-family: Arial, sans-serif; background-color: #f4f6f9; padding: 20px; }
+  .card { background: #ffffff; padding: 30px; border-radius: 10px; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+  .btn { display: inline-block; background-color: #0070ba; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+  .warning { color: #d9534f; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h2 style="color: #003087;">PayPal Account Security Notice</h2>
+  <p class="warning">⚠️ We noticed an unauthorized login attempt from IP Address 192.168.1.105 (Moscow, Russia).</p>
+  <p>For your security, we have temporarily limited your account capabilities. To restore full access, you must verify your identity immediately.</p>
+  <p style="text-align: center; margin: 30px 0;">
+    <a href="http://pаypal-verify-account.tk/login?token=98237498" class="btn">Verify PayPal Account Now</a>
+  </p>
+  <p style="font-size: 12px; color: #777;">If you do not complete verification within 24 hours, your account will be permanently restricted.</p>
+  <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+  <p style="font-size: 11px; color: #aaa;">PayPal Inc., 2211 North First Street, San Jose, CA 95131</p>
+</div>
+</body>
+</html>
