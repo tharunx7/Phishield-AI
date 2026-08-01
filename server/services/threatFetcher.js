@@ -1,17 +1,5 @@
-/**
- * PhishShield AI — Threat Intelligence Fetcher
- *
- * Fetches live threat data from:
- *   1. URLhaus API  (https://urlhaus-api.abuse.ch)  — malware/phishing URL feeds
- *   2. OpenPhish     (https://openphish.com/feed.txt) — curated phishing URL feed
- *
- * Aggregates into a "Last 30 Days" global statistics object, with a
- * dedicated financial-threat parser that tags banking/finance URLs.
- */
-
 const historicalBaseline = require('../data/historicalBaseline.js');
 
-// ── Financial keyword sets for the finance-sector parser ───────
 const FINANCIAL_KEYWORDS = [
   'paypal', 'chase', 'wellsfargo', 'wells-fargo', 'bankofamerica',
   'bank-of-america', 'citibank', 'citi', 'hsbc', 'barclays',
@@ -26,22 +14,14 @@ const FINANCIAL_KEYWORDS = [
   'icici', 'hdfc', 'kotak', 'axis-bank', 'axisbank',
 ];
 
-/**
- * Check if a URL targets the financial sector
- */
 function isFinancialTarget(url) {
   const lower = url.toLowerCase();
   return FINANCIAL_KEYWORDS.some((kw) => lower.includes(kw));
 }
 
-// ── In-memory cache ────────────────────────────────────────────
 let cachedLiveData = null;
 let lastFetchTimestamp = null;
 
-/**
- * Fetch recent URLs from URLhaus API
- * Docs: https://urlhaus-api.abuse.ch/
- */
 async function fetchURLhausData() {
   try {
     const response = await fetch('https://urlhaus-api.abuse.ch/v1/urls/recent/limit/1000/', {
@@ -56,7 +36,6 @@ async function fetchURLhausData() {
     const data = await response.json();
     const urls = data.urls || [];
 
-    // Filter to last 30 days
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -65,10 +44,8 @@ async function fetchURLhausData() {
       return added >= thirtyDaysAgo;
     });
 
-    // We'll return the raw list of URLs for the Bloom Filter
     const maliciousUrlList = recentURLs.map(entry => entry.url || '').filter(Boolean);
 
-    // Categorize
     let malwareCount = 0;
     let phishingCount = 0;
     let financialCount = 0;
@@ -110,10 +87,6 @@ async function fetchURLhausData() {
   }
 }
 
-/**
- * Fetch phishing URLs from OpenPhish feed
- * Returns plain-text, one URL per line
- */
 async function fetchOpenPhishData() {
   try {
     const response = await fetch('https://openphish.com/feed.txt');
@@ -134,18 +107,15 @@ async function fetchOpenPhishData() {
     urls.forEach((url) => {
       if (isFinancialTarget(url)) financialCount++;
 
-      // Extract brand from URL hostname
       try {
         const hostname = new URL(url).hostname.toLowerCase();
         const parts = hostname.split('.');
         const brand = parts.length >= 2 ? parts[parts.length - 2] : hostname;
         targetedBrands[brand] = (targetedBrands[brand] || 0) + 1;
       } catch {
-        // Skip invalid URLs
       }
     });
 
-    // Sort brands by frequency
     const topBrands = Object.entries(targetedBrands)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 20)
@@ -173,10 +143,6 @@ async function fetchOpenPhishData() {
   }
 }
 
-/**
- * Aggregate live 30-day statistics from all feeds
- * Merges with baseline expectations for realistic numbers
- */
 async function aggregateLive30DayStats() {
   console.log('[ThreatFetcher] Starting 30-day aggregation...');
 
@@ -185,21 +151,15 @@ async function aggregateLive30DayStats() {
     fetchOpenPhishData(),
   ]);
 
-  // Combine raw counts from feeds
   const feedTotal = urlhausData.totalURLs + openPhishData.totalURLs;
   const feedFinancial = urlhausData.financialCount + openPhishData.financialCount;
   const feedMalware = urlhausData.malwareCount;
   const feedPhishing = urlhausData.phishingCount + openPhishData.totalURLs;
 
-  // Scale to realistic 30-day global estimates using baseline ratios
-  // The feeds capture a fraction of real traffic; we scale by baseline context
   const latestMonthly = historicalBaseline.monthlyTrend[historicalBaseline.monthlyTrend.length - 1];
   const baselineTotal = latestMonthly.totalAttacks;
   const baselineBanking = latestMonthly.bankingScams;
 
-
-
-  // If feeds returned data, blend with baseline; otherwise use pure baseline
   const hasLiveData = feedTotal > 0;
   const scaleFactor = hasLiveData ? Math.max(1, baselineTotal / Math.max(feedTotal, 1) * 0.001) : 1;
 
@@ -237,7 +197,6 @@ async function aggregateLive30DayStats() {
     isLiveData: hasLiveData,
   };
 
-  // Financial Threat Index
   const financialIndex = {
     globalBankingScams30d: live30Day.bankingScams,
     financialSectorShare: live30Day.financialSectorPercent,
@@ -258,22 +217,16 @@ async function aggregateLive30DayStats() {
     lastUpdated: new Date().toISOString(),
   };
 
-  // Cache it
   cachedLiveData = result;
   lastFetchTimestamp = Date.now();
 
-  console.log(`[ThreatFetcher] Aggregation complete. Total threats: ${live30Day.totalThreatsDetected}, Banking scams: ${live30Day.bankingScams}, Live data: ${hasLiveData}`);
+  console.log(`[ThreatFetcher] Aggregation complete. Total threats: ${live30Day.totalThreatsDetected}`);
   return result;
 }
 
-/**
- * Get cached data or fetch fresh
- * Cache is valid for 6 hours
- */
 async function getThreatData(forceRefresh = false) {
   const SIX_HOURS = 6 * 60 * 60 * 1000;
   if (!forceRefresh && cachedLiveData && lastFetchTimestamp && (Date.now() - lastFetchTimestamp < SIX_HOURS)) {
-    console.log('[ThreatFetcher] Returning cached data');
     return cachedLiveData;
   }
   return aggregateLive30DayStats();

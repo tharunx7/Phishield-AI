@@ -1,18 +1,3 @@
-/**
- * PhishShield AI — Threat Intelligence Server
- *
- * Express backend that:
- *   1. Fetches live threat data from URLhaus + OpenPhish every 12 hours (node-cron)
- *   2. Serves the blended live-30-day + 5-year-historical data via REST API
- *   3. Provides a health-check endpoint
- *
- * Endpoints:
- *   GET /api/threat-trends   → Full threat intelligence payload
- *   GET /api/health          → Server health check
- *
- * Default port: 3001 (configurable via PORT env var)
- */
-
 const express = require('express');
 const cors = require('cors');
 const cron = require('node-cron');
@@ -21,11 +6,10 @@ const { getThreatData, aggregateLive30DayStats } = require('./services/threatFet
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// ── Middleware ──────────────────────────────────────────────────
 app.use(cors({
   origin: [
-    /^chrome-extension:\/\//,     // Chrome extension popup
-    /^http:\/\/localhost/,         // Vite dev server
+    /^chrome-extension:\/\//,
+    /^http:\/\/localhost/,
     /^http:\/\/127\.0\.0\.1/,
   ],
   methods: ['GET'],
@@ -34,13 +18,6 @@ app.use(cors({
 
 app.use(express.json());
 
-// ── Routes ─────────────────────────────────────────────────────
-
-/**
- * GET /api/threat-trends
- * Returns the full threat intelligence payload:
- *   { live30Day, historical5Year, financialIndex, lastUpdated }
- */
 app.get('/api/threat-trends', async (req, res) => {
   try {
     const forceRefresh = req.query.refresh === 'true';
@@ -59,11 +36,6 @@ app.get('/api/threat-trends', async (req, res) => {
   }
 });
 
-/**
- * GET /api/unshorten
- * Quishing Protection Engine — Traces redirected & shortened QR URLs
- * Tracks bit.ly, tinyurl.com, t.co to expose the ultimate malicious destination.
- */
 app.get('/api/unshorten', async (req, res) => {
   try {
     let targetUrl = req.query.url;
@@ -84,7 +56,6 @@ app.get('/api/unshorten', async (req, res) => {
     let finalUrl = targetUrl;
     let isShortened = false;
 
-    // Check pre-computed Quishing simulation map
     const lowerUrl = targetUrl.toLowerCase();
     for (const [shortKey, destination] of Object.entries(shortenerMap)) {
       if (lowerUrl.includes(shortKey)) {
@@ -94,7 +65,6 @@ app.get('/api/unshorten', async (req, res) => {
       }
     }
 
-    // Perform live HTTP HEAD / GET fetch if not in simulation map
     if (!isShortened) {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 3000);
@@ -135,10 +105,6 @@ app.get('/api/unshorten', async (req, res) => {
   }
 });
 
-/**
- * GET /api/health
- * Simple health check
- */
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -149,7 +115,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ── Cron Job: Refresh threat data every 12 hours ───────────────
 cron.schedule('0 */12 * * *', async () => {
   console.log('[Cron] Scheduled 12-hour threat data refresh started...');
   try {
@@ -160,26 +125,14 @@ cron.schedule('0 */12 * * *', async () => {
   }
 });
 
-// ── Server Start ───────────────────────────────────────────────
 app.listen(PORT, async () => {
-  console.log('');
-  console.log('╔══════════════════════════════════════════════════════════╗');
-  console.log('║   PhishShield AI — Threat Intelligence Server           ║');
-  console.log(`║   Running on http://localhost:${PORT}                      ║`);
-  console.log('║   Endpoints:                                            ║');
-  console.log('║     GET /api/threat-trends                              ║');
-  console.log('║     GET /api/health                                     ║');
-  console.log('║   Cron: Every 12 hours (URLhaus + OpenPhish refresh)    ║');
-  console.log('╚══════════════════════════════════════════════════════════╝');
-  console.log('');
+  console.log(`[Server] Running on http://localhost:${PORT}`);
 
-  // Initial data fetch on startup
-  console.log('[Server] Performing initial threat data fetch...');
   try {
     await aggregateLive30DayStats();
     console.log('[Server] Initial data fetch complete. Server ready.');
   } catch (error) {
-    console.error('[Server] Initial fetch failed (will retry via cron):', error.message);
+    console.error('[Server] Initial fetch failed:', error.message);
   }
 });
 

@@ -1,8 +1,3 @@
-/**
- * PhishShield AI — Feature Extraction Pipeline
- * Extracts lexical, structural, and typosquatting features from URLs.
- */
-
 const SUSPICIOUS_TLDS = [
   '.tk', '.ml', '.ga', '.cf', '.gq', '.xyz', '.top',
   '.buzz', '.click', '.link', '.work', '.surf',
@@ -65,9 +60,9 @@ function levenshteinDistance(a, b) {
         matrix[i][j] = matrix[i - 1][j - 1];
       } else {
         matrix[i][j] = Math.min(
-          matrix[i - 1][j - 1] + 1, // substitution
-          matrix[i][j - 1] + 1,     // insertion
-          matrix[i - 1][j] + 1      // deletion
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1
         );
       }
     }
@@ -138,7 +133,6 @@ const FeatureExtractor = {
       
       features.at_symbol = url.includes('@') ? 1 : 0;
       
-      // double slash redirect
       features.double_slash_redirect = url.lastIndexOf('//') > 7 ? 1 : 0;
 
       features.path_depth = pathname.split('/').filter(Boolean).length;
@@ -166,7 +160,6 @@ const FeatureExtractor = {
 
       features.suspicious_keyword_count = isKnownSafe ? 0 : kwCount;
 
-      // Brand impersonation check
       let maxImpersonationScore = 0;
       if (!isKnownSafe) {
         const domainVariants = [
@@ -180,7 +173,6 @@ const FeatureExtractor = {
           for (const officialDomain of brand.domains) {
             const officialName = officialDomain.split('.')[0];
             
-            // Check if subdomain contains brand exactly
             if (dots.length > 2) {
               const subdomains = dots.slice(0, -2);
               for (const sub of subdomains) {
@@ -205,7 +197,6 @@ const FeatureExtractor = {
       }
       features.brand_impersonation_score = maxImpersonationScore;
 
-      // Path brand impersonation
       let pathBrandImp = 0;
       if (!isKnownSafe) {
         const pathnameLower = pathname.toLowerCase();
@@ -220,27 +211,21 @@ const FeatureExtractor = {
       }
       features.path_brand_impersonation = pathBrandImp;
 
-      // Suspicious extension in path
       const suspiciousExts = ['.exe', '.scr', '.bat', '.cmd', '.msi', '.js', '.vbs', '.ps1', '.jar', '.apk', '.dmg', '.iso'];
       features.has_suspicious_extension = suspiciousExts.some(ext => pathname.toLowerCase().endsWith(ext)) ? 1 : 0;
 
-      // Digit ratio in domain
       const digits = hostname.replace(/[^0-9]/g, '').length;
       features.digit_ratio = hostname.length > 0 ? digits / hostname.length : 0;
 
-      // Special character ratio in domain
       const specials = hostname.replace(/[a-zA-Z0-9]/g, '').length;
       features.special_char_ratio = hostname.length > 0 ? specials / hostname.length : 0;
 
-      // Non standard port
       features.has_non_standard_port = (urlObj.port && urlObj.port !== '443' && urlObj.port !== '80') ? 1 : 0;
 
-      // URL shorteners
       const shorteners = ['bit.ly', 'tinyurl.com', 't.co', 'goo.gl', 'rebrand.ly', 'is.gd', 'buff.ly', 'adf.ly'];
       features.url_shortener_detected = shorteners.some(s => hostname === s || hostname.endsWith('.' + s)) ? 1 : 0;
 
     } catch (e) {
-      // Return features filled with defaults
     }
 
     return {
@@ -254,7 +239,6 @@ const FeatureExtractor = {
       const urlObj = new URL(url);
       const segments = [];
       
-      // 1. Protocol
       segments.push({ 
         text: urlObj.protocol + '//', 
         type: 'protocol', 
@@ -262,7 +246,6 @@ const FeatureExtractor = {
         message: features.has_https ? 'Secure connection' : 'Unencrypted connection (HTTP is insecure)' 
       });
       
-      // 2. Hostname parsing
       const host = urlObj.hostname;
       
       if (features.has_ip_address) {
@@ -305,7 +288,6 @@ const FeatureExtractor = {
         if (tld) segments.push({ text: tld, type: 'tld', risk: tldRisk, message: tldMsg });
       }
 
-      // 3. Port
       if (urlObj.port) {
         let portRisk = features.has_non_standard_port ? 'warning' : 'safe';
         segments.push({ 
@@ -316,7 +298,6 @@ const FeatureExtractor = {
         });
       }
 
-      // 4. Path
       let pathRisk = 'safe';
       let pathMsg = 'URL Path';
       if (features.path_brand_impersonation) {
@@ -333,7 +314,6 @@ const FeatureExtractor = {
          segments.push({ text: '/', type: 'path', risk: 'safe', message: pathMsg });
       }
 
-      // 5. Query params
       if (urlObj.search) {
         segments.push({ text: urlObj.search, type: 'query', risk: 'safe', message: 'Query parameters' });
       }
