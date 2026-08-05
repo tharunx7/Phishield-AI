@@ -5,12 +5,12 @@
 [![Node.js](https://img.shields.io/badge/Backend-Node.js_%2B_Express-green.svg)](https://nodejs.org/)
 [![License](https://img.shields.io/badge/License-MIT-purple.svg)](LICENSE)
 
-**PhishShield AI** is an enterprise-grade cybersecurity ecosystem designed to detect, analyze, and neutralize zero-day phishing attacks, Internationalized Domain Name (IDN) homoglyph spoofs, credential harvesting lures, and malicious macro file attachments in real time.
+**PhishShield AI** is an enterprise-grade cybersecurity ecosystem designed to detect, analyze, and neutralize zero day phishing attacks, Internationalized Domain Name (IDN) homoglyph spoofs, credential harvesting lures, and malicious macro file attachments in real time.
 
 The platform consists of three core components:
 1. **Manifest V3 Chrome Extension:** Frontline client-side sensor with a real-time site blocker and local AI heuristics engine.
 2. **React SOC Dashboard:** Centralized security operations center displaying live threat telemetry, risk scores, and email header analysis.
-3. **Node.js Threat Intelligence Backend:** Express API server aggregating live threat feeds (URLhaus & OpenPhish) with privacy-first client syncing.
+3. **Node.js Threat Intelligence Backend:** Express API server aggregating live threat feeds (URLhaus & OpenPhish) with privacy--first client syncing.
 
 ---
 
