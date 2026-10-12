@@ -9,7 +9,7 @@
 
 The platform consists of three core components:
 1. **Manifest V3 Chrome Extension:** Frontline client-side sensor with a real-time site blocker and local AI heuristics engine.
-2. **React SOC Dashboard:** Centralized security operations center displaying live threat telemetry, risk scores, and email header analysis.
+2. **React SOC Dashboard:** Centralized security operations center displaying live threat telementry, risk scores, and email header analysis.
 3. **Node.js Threat Intelligence Backend:** Express API server aggregating live threat feeds (URLhaus & OpenPhish) with privacy--first client syncing.
 
 ---
